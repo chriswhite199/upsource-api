@@ -1,4 +1,4 @@
-package com.gihub.chriswhite199.upsourceapi.schema;
+package com.github.chriswhite199.upsourceapi.schema;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
@@ -10,8 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.gihub.chriswhite199.upsourceapi.schema.CodeGenerator.DTO_PACKAGE;
 
 public class Service {
   public String name;
@@ -29,10 +27,10 @@ public class Service {
 
               return MethodSpec.methodBuilder(method.name)
                       .addModifiers(Modifier.ABSTRACT, Modifier.PUBLIC)
-                      .returns(ClassName.get(returnPackage.map(pkg -> DTO_PACKAGE + "." + pkg)
-                              .orElse(DTO_PACKAGE), returnType.orElseThrow()))
-                      .addParameter(ClassName.get(argPackage.map(pkg -> DTO_PACKAGE + "." + pkg)
-                              .orElse(DTO_PACKAGE), argType.orElseThrow()), "arg")
+                      .returns(ClassName.get(returnPackage.map(pkg -> CodeGenerator.DTO_PACKAGE + "." + pkg)
+                              .orElse(CodeGenerator.DTO_PACKAGE), returnType.orElseThrow()))
+                      .addParameter(ClassName.get(argPackage.map(pkg -> CodeGenerator.DTO_PACKAGE + "." + pkg)
+                              .orElse(CodeGenerator.DTO_PACKAGE), argType.orElseThrow()), "arg")
                       .build();
             })
             .collect(Collectors.toList());

@@ -1,4 +1,4 @@
-package com.gihub.chriswhite199.upsourceapi.schema;
+package com.github.chriswhite199.upsourceapi.schema;
 
 import java.util.List;
 

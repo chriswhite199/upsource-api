@@ -1,0 +1,75 @@
+plugins {
+    id 'java-library'
+    id "de.undercouch.download" version "4.1.1"
+}
+
+repositories {
+    mavenCentral()
+}
+
+def jsonDefDir = file("$buildDir/json-defs")
+jsonDefDir.mkdirs()
+
+def upsourceBaseUrl = 'https://upsource.jetbrains.com/~api_doc/json'
+def generatedSrcDir = file("$buildDir/generated-sources")
+
+def upsourceJsonDefs = [
+        'Analytics.json',
+        'FileOrDirectoryContent.json',
+        'FindUsages.json',
+        'Ids.json',
+        'IssueTrackers.json',
+        'Misc.json',
+        'Projects.json',
+        'Users.json',
+        'Service.json',
+].collect { upsourceBaseUrl + '/' + it }
+
+configurations {
+    codeGen
+}
+
+dependencies {
+    codeGen project(':code-gen')
+}
+
+task downloadJsonFiles(type: Download) {
+    src(upsourceJsonDefs)
+    dest jsonDefDir
+    onlyIfModified true
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir generatedSrcDir
+        }
+    }
+}
+
+task generateCode(type: JavaExec) {
+    dependsOn downloadJsonFiles
+
+    inputs.dir(jsonDefDir)
+    outputs.dir(generatedSrcDir)
+
+    classpath = configurations.codeGen
+
+    main = 'com.github.chriswhite199.upsourceapi.schema.CodeGenerator'
+
+    // arguments to pass to the application
+    args jsonDefDir, generatedSrcDir
+
+    doFirst {
+        generatedSrcDir.deleteDir()
+    }
+}
+
+compileJava.dependsOn generateCode
+
+clean {
+    doLast {
+        jsonDefDir.deleteDir()
+        generatedSrcDir.deleteDir()
+    }
+}

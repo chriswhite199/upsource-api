@@ -1,0 +1,13 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'com.squareup', name: 'javapoet', version: '1.13.0'
+    api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.1'
+    api group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+}

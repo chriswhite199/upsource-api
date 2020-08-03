@@ -1,4 +1,4 @@
-package com.gihub.chriswhite199.upsourceapi.schema;
+package com.github.chriswhite199.upsourceapi.schema;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.gihub.chriswhite199.upsourceapi.schema.CodeGenerator.DTO_PACKAGE;
-
 public class EnumModel {
   public String name;
   public String description;
@@ -21,7 +19,7 @@ public class EnumModel {
     TypeSpec.Builder eNumBuilder = TypeSpec.enumBuilder(this.name)
             .addField(int.class, "number", Modifier.PRIVATE, Modifier.FINAL)
             .addMethod(MethodSpec.constructorBuilder()
-                    .addParameter(String.class, "number")
+                    .addParameter(int.class, "number")
                     .addStatement("this.$N = $N", "number", "number")
                     .build())
             .addMethod(MethodSpec.methodBuilder("getNumber")
@@ -34,7 +32,7 @@ public class EnumModel {
 
     TypeSpec eNum = eNumBuilder.build();
 
-    JavaFile javaFile = JavaFile.builder(DTO_PACKAGE, eNum)
+    JavaFile javaFile = JavaFile.builder(CodeGenerator.ENUM_PACKAGE, eNum)
             .addFileComment(Optional.ofNullable(this.description).orElse(""))
             .build();
 

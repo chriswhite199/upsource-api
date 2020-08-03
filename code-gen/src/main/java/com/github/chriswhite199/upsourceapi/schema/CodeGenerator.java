@@ -1,4 +1,4 @@
-package com.gihub.chriswhite199.upsourceapi.schema;
+package com.github.chriswhite199.upsourceapi.schema;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public class CodeGenerator {
   public static final String DTO_PACKAGE = "com.github.chriswhite199.upsourceapi.dto";
+  public static final String MSGS_PACKAGE = DTO_PACKAGE + ".messages";
+  public static final String ENUM_PACKAGE = DTO_PACKAGE + ".enums";
 
   public static void main(final String args[]) {
     final var inputDir = new File(args[0]);

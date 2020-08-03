@@ -1,9 +1,9 @@
-package com.gihub.chriswhite199.upsourceapi.schema;
+package com.github.chriswhite199.upsourceapi.schema;
 
-import com.squareup.javapoet.ArrayTypeName;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.*;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.lang.model.element.Modifier;
 
 public class Field {
   public String name;
@@ -13,6 +13,7 @@ public class Field {
 
   public static FieldSpec asFieldSpec(Field field) {
     return FieldSpec.builder(mapType(field), field.name)
+            .addModifiers(Modifier.PUBLIC)
             .addJavadoc(String.format("(%s) %s", field.label, field.description))
             .build();
   }
@@ -40,10 +41,22 @@ public class Field {
                 : field.label.equals("required") ? TypeName.BOOLEAN : ClassName.get(Boolean.class);
 
       default:
-        final var typeName = ClassName.get(CodeGenerator.DTO_PACKAGE + ".messages", field.type);
+        final var pkgName = field.type.endsWith("Enum")
+                ? CodeGenerator.ENUM_PACKAGE
+                : CodeGenerator.MSGS_PACKAGE;
+        final var typeName = ClassName.get(pkgName, field.type);
         return field.label.equals("repeated")
                 ? ArrayTypeName.of(typeName)
                 : typeName;
     }
+  }
+
+  public static MethodSpec asWithMethodSpec(Field field, TypeName parentTypeName) {
+    return MethodSpec.methodBuilder("with" + StringUtils.capitalize(field.name))
+            .addModifiers(Modifier.PUBLIC)
+            .addParameter(mapType(field), field.name, Modifier.FINAL)
+            .addStatement("this.$1L = $1L; return this", field.name)
+            .returns(parentTypeName)
+            .build();
   }
 }

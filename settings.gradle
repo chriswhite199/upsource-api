@@ -1,2 +1,5 @@
 rootProject.name = 'upsource-api'
 
+include 'code-gen'
+include 'api-lib'
+include 'http-lib'
