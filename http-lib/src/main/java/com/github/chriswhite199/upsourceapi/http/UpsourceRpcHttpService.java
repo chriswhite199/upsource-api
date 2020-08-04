@@ -1,6 +1,9 @@
 package com.github.chriswhite199.upsourceapi.http;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.chriswhite199.upsourceapi.dto.RpcException;
+import com.github.chriswhite199.upsourceapi.dto.RpcResult;
 import com.github.chriswhite199.upsourceapi.service.UpsourceRPC;
 
 import java.lang.reflect.InvocationHandler;
@@ -47,6 +50,13 @@ public class UpsourceRpcHttpService implements InvocationHandler {
 
     final var httpResp = this.httpClient.send(httpReq, HttpResponse.BodyHandlers.ofByteArray());
 
-    return objectMapper.readValue(httpResp.body(), method.getReturnType());
+    final var resultWrapper = objectMapper.readValue(httpResp.body(), new TypeReference<RpcResult<Object>>() {
+    });
+
+    if (resultWrapper.error != null) {
+      throw new RpcException(resultWrapper.error);
+    } else {
+      return objectMapper.convertValue(resultWrapper.result, method.getReturnType());
+    }
   }
 }

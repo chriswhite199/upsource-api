@@ -31,6 +31,7 @@ public class Service {
                               .orElse(CodeGenerator.DTO_PACKAGE), returnType.orElseThrow()))
                       .addParameter(ClassName.get(argPackage.map(pkg -> CodeGenerator.DTO_PACKAGE + "." + pkg)
                               .orElse(CodeGenerator.DTO_PACKAGE), argType.orElseThrow()), "arg")
+                      .addException(CodeGenerator.RPC_EXCEPTION_CLASS_NAME)
                       .build();
             })
             .collect(Collectors.toList());
