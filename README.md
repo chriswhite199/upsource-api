@@ -1,5 +1,7 @@
 # Upsource Java REST API Client
 
+[![CircleCI](https://circleci.com/gh/chriswhite199/upsource-api.svg?style=shield)](https://circleci.com/gh/chriswhite199/upsource-api)
+
 Creates a simple REST API client for the Jetbrains Upsource web service.
 
 ## Building
