@@ -2,6 +2,7 @@ package com.github.chriswhite199.upsourceapi.http;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.chriswhite199.upsourceapi.dto.RpcException;
 import com.github.chriswhite199.upsourceapi.dto.RpcResult;
 import com.github.chriswhite199.upsourceapi.service.UpsourceRPC;
@@ -16,7 +17,9 @@ import java.net.http.HttpResponse;
 import java.util.Base64;
 
 public class UpsourceRpcHttpService implements InvocationHandler {
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper()
+          .configure(SerializationFeature.WRITE_ENUMS_USING_INDEX, true);
+
   private final HttpClient httpClient;
   private final String baseUrl;
   private final String username;

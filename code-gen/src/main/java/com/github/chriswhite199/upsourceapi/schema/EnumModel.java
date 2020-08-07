@@ -27,6 +27,10 @@ public class EnumModel {
                     .returns(int.class).build())
             .addModifiers(Modifier.PUBLIC);
 
+    eNumBuilder.addEnumConstant("_NA_", TypeSpec.anonymousClassBuilder("$L", 0)
+            .addAnnotation(Deprecated.class)
+            .build());
+
     values.forEach(value -> eNumBuilder.addEnumConstant(value.name,
             TypeSpec.anonymousClassBuilder("$L", value.number).build()));
 
